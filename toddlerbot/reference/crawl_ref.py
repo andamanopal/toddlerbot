@@ -27,9 +27,12 @@ class CrawlReference(MotionReference):
         """
         super().__init__("crawl", "keyframe", robot, dt, fixed_base)
 
-        # Load crawling motion data
+        # Load crawling motion data (env var override for interpolation experiments)
         robot_suffix = "_2xc" if "2xc" in robot.name else "_2xm"
-        motion_file_path = os.path.join("motion", f"crawl{robot_suffix}.lz4")
+        motion_file_path = os.environ.get(
+            "MOTION_FILE_OVERRIDE",
+            os.path.join("motion", f"crawl{robot_suffix}.lz4"),
+        )
         self.motion_ref = joblib.load(motion_file_path)
 
         # Extract basic data
